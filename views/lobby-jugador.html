@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlantic City - Lobby de Juegos</title>
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="background: #111; color: white; margin: 0; font-family: sans-serif;">
+
+    <header
+        style="background: #1a252f; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f39c12;">
+        <h2><i class="fa-solid fa-gem" style="color: #f39c12;"></i> Atlantic City Gaming</h2>
+        <button onclick="cerrarSesion()"
+            style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
+            <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesion
+        </button>
+    </header>
+
+
+    <main style="padding: 2rem; max-width: 1200px; margin: auto;">
+        <h3 style="color: #f39c12;">Tus Juegos Disponibles</h3>
+
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+
+            <div class="game-card"
+                style="background: #ffffff; border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-dice-five" style="font-size: 3rem; color: #8a2be2; margin-bottom: 1rem;"></i>
+                <h3 style="color: #070606; margin-bottom: 0.5rem;">Tragamonedas VIP</h3>
+                <p style="color: #2e2d2d; font-size: 0.9rem; margin-bottom: 1rem;">¡Gira los rodillos y gana increíbles
+                    premios de neón!</p>
+
+                <a href="juegos/tragamonedas.html"
+                    style="display: inline-block; background: #e67e22; color: white; padding: 0.6rem 1.2rem; border-radius: 4px; text-decoration: none; font-weight: bold;">
+                    Jugar Ahora
+                </a>
+            </div>
+
+            <!-- Tarjeta del nuevo juego: La Ruleta -->
+            <div class="game-card"
+                style="background: white; border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-dharmachakra" style="font-size: 3rem; color: #e67e22; margin-bottom: 1rem;"></i>
+                <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">Ruleta de la Suerte</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">¡Gira y gana increíbles premios en
+                    fichas y bonos exclusivos!</p>
+
+                <!-- Enlace que dirige directamente a tu juego de ruleta -->
+                <!-- Enlace corregido -->
+                <a href="juegos/ruleta.html"
+                    style="display: inline-block; background: #e67e22; color: white; padding: 0.6rem 1.2rem; border-radius: 4px; text-decoration: none; font-weight: bold;">
+                    Jugar Ahora
+                </a>
+            </div>
+
+            <div
+                style="background: #222; border-radius: 8px; padding: 1.5rem; text-align: center; border: 1px solid #333;">
+                <i class="fa-solid fa-spade" style="font-size: 3rem; color: #2ecc71; margin-bottom: 1rem;"></i>
+                <h4>Poker Texas Hold'em</h4>
+                <button
+                    style="background: #f39c12; color: black; border: none; padding: 0.6rem 1.2rem; font-weight: bold; border-radius: 4px; cursor: pointer;">Jugar
+                    Ahora</button>
+            </div>
+
+        </div>
+        <!-- Tarjeta de Contacto en el Lobby -->
+        <div class="game-card"
+            style="background: #222; border-radius: 8px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <i class="fa-solid fa-headset" style="font-size: 2.8rem; color: #e67e22; margin-bottom: 1rem;"></i>
+                <h3 style="color: #fff; margin-bottom: 0.5rem;">Soporte & Atención VIP</h3>
+                <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 1.2rem;">¿Necesitas ayuda con tu cuenta o
+                    recargas?</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Enlace directo a WhatsApp / Teléfono -->
+                <a href="https://wa.me/51908021687" target="_blank"
+                    style="background: #25D366; color: white; padding: 0.6rem; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i class="fa-brands fa-whatsapp"></i> +51 908 021 687
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function cerrarSesion() {
+            localStorage.removeItem("sesion_crm");
+            window.location.href = "../login.html";
+        }
+        function abrirSoporte() {
+            document.getElementById('modalSoporte').style.display = 'flex';
+        }
+        function cerrarSoporte() {
+            document.getElementById('modalSoporte').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

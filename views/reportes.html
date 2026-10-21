@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Atlantic City</title>
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <header class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #1a252f; color: white;">
+    <div class="user-info" style="display: flex; align-items: center; gap: 1rem;">
+        <!-- Enlace para regresar al Dashboard -->
+        <a href="../index.html" style="color: #3498db; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+            <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+        </a>
+        <span style="border-left: 1px solid #555; padding-left: 1rem;">Bienvenido, <strong>Administrador</strong> <i class="fa-solid fa-user-gear"></i></span>
+    </div>
+
+    <!-- Botón de Cerrar Sesión -->
+    <button onclick="cerrarSesion()" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+    </button>
+</header>
+
+    <div class="app-container">
+        <!-- Menú Lateral -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="../index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="segmentacion.html"><i class="fa-solid fa-users"></i> Segmentación</a></li>
+                    <li class="active"><a href="reportes.html"><i class="fa-solid fa-file-contract"></i> Reportes</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <section class="content-header">
+                <h2>Centro de Reportes y Exportación</h2>
+                <p>Generación de informes para la toma de decisiones directivas.</p>
+            </section>
+
+            <!-- Tarjetas de Reportes Descargables -->
+            <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <i class="fa-solid fa-file-csv" style="font-size: 2rem; color: #27ae60;"></i>
+                    <h3 style="margin: 0.5rem 0;">Base de Clientes Unificada</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Exporta la lista completa de clientes (JSON + LocalStorage) en formato CSV.</p>
+                    <button id="btn-exportar-csv" style="background: #27ae60; color: white; border: none; padding: 0.6rem 1rem; border-radius: 4px; cursor: pointer; width: 100%;">
+                        <i class="fa-solid fa-download"></i> Descargar CSV
+                    </button>
+                </div>
+
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <i class="fa-solid fa-chart-pie" style="font-size: 2rem; color: #2980b9;"></i>
+                    <h3 style="margin: 0.5rem 0;">Resumen Ejecutivo VIP</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Genera un resumen en pantalla de la proporción de clientes VIP vs Regulares.</p>
+                    <button id="btn-generar-resumen" style="background: #2980b9; color: white; border: none; padding: 0.6rem 1rem; border-radius: 4px; cursor: pointer; width: 100%;">
+                        <i class="fa-solid fa-eye"></i> Generar Resumen
+                    </button>
+                </div>
+
+            </section>
+
+            <!-- Área de Resultados del Resumen -->
+            <section id="contenedor-resumen" style="background: white; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h3>Resultados del Análisis</h3>
+                <div id="resultado-metricas" style="margin-top: 1rem; line-height: 1.8;"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/reportes.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlantic City - Iniciar Sesión</title>
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body
+    style="background: #1a252f; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div
+        style="background: white; padding: 2.5rem; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center;">
+
+        <!-- Logo y Título -->
+        <div style="margin-bottom: 1.5rem;">
+            <img src="assets/img/descarga.png" alt="Atlantic City Logo" style="height: 60px; margin-bottom: 0.5rem;"
+                onerror="this.style.display='none'">
+            <h2 style="color: #2c3e50; margin: 0.5rem 0 0.2rem 0;">Atlantic City</h2>
+            <p style="color: #7f8c8d; font-size: 0.9rem; margin: 0;">Acceso al Portal CRM & Juegos</p>
+        </div>
+
+        <!-- Formulario de Login -->
+        <form id="form-login">
+            <div style="margin-bottom: 1rem; text-align: left;">
+                <label
+                    style="display: block; margin-bottom: 0.4rem; font-weight: bold; font-size: 0.9rem; color: #333;">Correo
+                    Electrónico:</label>
+                <input type="email" id="login-email" required placeholder="admin@atlanticcity.pe o tu correo"
+                    style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.95rem;">
+            </div>
+
+            <button type="submit"
+                style="width: 100%; background: #27ae60; color: white; border: none; padding: 0.8rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <i class="fa-solid fa-right-to-bracket"></i> Ingresar
+            </button>
+        </form>
+
+        <!-- ENLACE FUERA DEL FORMULARIO (Evita que el botón lo atrape) -->
+        <div style="margin-top: 1.2rem; text-align: center;">
+            <a href="./registro.html"
+                style="color: #27ae60; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                ¿No tienes cuenta? Regístrate aquí
+            </a>
+        </div>
+
+        <p style="color: #95a5a6; font-size: 0.8rem; margin-top: 1.5rem; line-height: 1.3;">
+            * Los correos autorizados en la Whitelist accederán al Panel Administrativo.
+        </p>
+        <!-- ENLACE DE MODO INVITADO -->
+        <div style="margin-top: 0.8rem; text-align: center;">
+            <a href="#" id="btn-modo-invitado"
+                style="color: #e67e22; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+                <i class="fa-solid fa-user-secret"></i> Ingresar como Invitado (Modo Vista)
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("btn-modo-invitado")?.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // 1. Incrementamos el contador de vistas en el localStorage
+            let vistasActuales = parseInt(localStorage.getItem("contador_vistas_invitado")) || 0;
+            vistasActuales++;
+            localStorage.setItem("contador_vistas_invitado", vistasActuales);
+
+            // 2. Creamos la sesión de invitado
+            const sesionInvitado = {
+                email: "invitado@atlanticcity.pe",
+                rol: "invitado",
+                nombre: "Usuario Invitado",
+                fechaIngreso: new Date().toISOString()
+            };
+            localStorage.setItem("sesion_crm", JSON.stringify(sesionInvitado));
+
+            alert("¡Entrando como Invitado al Portal de Juegos! (Visita N° " + vistasActuales + ")");
+            window.location.href = "views/lobby-jugador.html";
+        });
+        
+    </script>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

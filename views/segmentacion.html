@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segmentación de Clientes - Atlantic City</title>
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+   <header class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #1a252f; color: white;">
+    <div class="user-info" style="display: flex; align-items: center; gap: 1rem;">
+        <!-- Enlace para regresar al Dashboard -->
+        <a href="../index.html" style="color: #3498db; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+            <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+        </a>
+        <span style="border-left: 1px solid #555; padding-left: 1rem;">Bienvenido, <strong>Administrador</strong> <i class="fa-solid fa-user-gear"></i></span>
+    </div>
+
+    <!-- Botón de Cerrar Sesión -->
+    <button onclick="cerrarSesion()" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+    </button>
+</header>
+
+    <div class="app-container">
+        <!-- Menú Lateral -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="../index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                    <li class="active"><a href="segmentacion.html"><i class="fa-solid fa-users"></i> Segmentación</a></li>
+                    <li><a href="reportes.html"><i class="fa-solid fa-file-contract"></i> Reportes</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <section class="content-header">
+                <h2>Segmentación de Clientes</h2>
+                <p>Filtra y clasifica la base de datos para campañas y ofertas personalizadas.</p>
+            </section>
+
+            <!-- Panel de Control de Filtros -->
+            <section style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <form id="form-filtros" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <label for="filtro-categoria">Categoría:</label>
+                        <select id="filtro-categoria" style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">
+                            <option value="todos">Todas</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Regular">Regular</option>
+                        </select>
+                    </div>
+
+                    <div style="flex: 1; min-width: 200px;">
+                        <label for="filtro-preferencia">Preferencia de Juego:</label>
+                        <select id="filtro-preferencia" style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;">
+                            <option value="todos">Todas</option>
+                            <option value="Tragamonedas">Tragamonedas</option>
+                            <option value="Ruleta">Ruleta</option>
+                            <option value="Poker">Poker</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="btn-filtrar" style="background: #2980b9; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer;">
+                        <i class="fa-solid fa-filter"></i> Aplicar Filtros
+                    </button>
+                </form>
+            </section>
+
+            <!-- Tabla de Resultados -->
+            <section style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h3>Clientes Encontrados</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="background-color: #2c3e50; color: white; text-align: left;">
+                            <th style="padding: 0.75rem;">Nombre</th>
+                            <th style="padding: 0.75rem;">DNI</th>
+                            <th style="padding: 0.75rem;">Categoría</th>
+                            <th style="padding: 0.75rem;">Visitas al Mes</th>
+                            <th style="padding: 0.75rem;">Preferencia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-clientes">
+                        <!-- Carga dinámica con JS -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/segmentacion.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

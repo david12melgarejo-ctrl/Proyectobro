@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlantic City - Registro de Usuario</title>
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body
+    style="background: #1a252f; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div
+        style="background: white; padding: 2.5rem; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 style="color: #2c3e50; margin-bottom: 0.5rem;"><i class="fa-solid fa-user-plus"></i> Registro de Usuario
+            </h2>
+            <p style="color: #666; font-size: 0.9rem;">Crea tu cuenta para acceder a Atlantic City</p>
+        </div>
+
+        <form id="form-registro-publico">
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; color: #333;">Nombre
+                    Completo</label>
+                <input type="text" id="reg-nombre" required placeholder="Ej. Carlos Mendoza"
+                    style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <!-- Input de DNI corregido con límite exacto de 8 dígitos -->
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; color: #333;">DNI</label>
+                <input type="text" id="reg-dni" required maxlength="8" minlength="8" pattern="[0-9]{8}"
+                    title="Debe ingresar exactamente 8 dígitos numéricos" placeholder="Ej. 45879632"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <!-- Input de Correo con validación obligatoria de '@' -->
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; color: #333;">Correo
+                    Electrónico</label>
+                <input type="email" id="reg-email" required placeholder="correo@gmail.com"
+                    style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; color: #333;">Juego
+                    Preferido</label>
+                <select id="reg-preferencia"
+                    style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; background: white;">
+                    <option value="Ruleta">Ruleta</option>
+                    <option value="Tragamonedas">Tragamonedas</option>
+                    <option value="Poker">Poker</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label
+                    style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; color: #333;">Categoría
+                    Inicial</label>
+                <select id="reg-categoria"
+                    style="width: 100%; padding: 0.7rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; background: white;">
+                    <option value="Regular">Regular</option>
+                    <option value="VIP">VIP</option>
+                </select>
+            </div>
+
+            <button type="submit"
+                style="width: 100%; background: #27ae60; color: white; border: none; padding: 0.8rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem;">
+                Registrarse Ahora
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.2rem;">
+            <a href="login.html" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">
+                <i class="fa-solid fa-arrow-left"></i> Ya tengo una cuenta (Iniciar Sesión)
+            </a>
+        </div>
+    </div>
+
+    <!-- OJO: No cargamos main.js aquí para evitar bloqueos de sesión -->
+    <script>
+        document.getElementById("form-registro-publico").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const nuevoCliente = {
+                id: "CLI-" + Math.floor(1000 + Math.random() * 9000),
+                nombre: document.getElementById("reg-nombre").value.trim(),
+                dni: document.getElementById("reg-dni").value.trim(),
+                email: document.getElementById("reg-email").value.trim(),
+                categoria: document.getElementById("reg-categoria").value,
+                preferencia: document.getElementById("reg-preferencia").value,
+                visitasMes: 1,
+                fechaRegistro: new Date().toISOString().split('T')[0]
+            };
+
+            // Guardar en localStorage para que viaje directo al dashboard y segmentación
+            let clientesLocales = JSON.parse(localStorage.getItem("clientes_piloto")) || [];
+            clientesLocales.push(nuevoCliente);
+            localStorage.setItem("clientes_piloto", JSON.stringify(clientesLocales));
+
+            alert("¡Registro exitoso! Ya puedes iniciar sesión.");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+
+</html>

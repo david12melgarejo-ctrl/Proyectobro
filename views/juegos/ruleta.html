@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ruleta de bienvenida · 5 giros gratis</title>
+    <style>
+        /* ====== Estilos con alcance .wl para integrarlos sin choques ====== */
+        .wl {
+            --bg: #1a0b2e;
+            --card: #26124a;
+            --gold: #ffc93c;
+            --pink: #ff2e88;
+            --teal: #19e3c1;
+            --txt: #fff6e6;
+            --mute: #b9a6dc;
+            font-family: Bahnschrift, "Trebuchet MS", system-ui, sans-serif;
+            color: var(--txt);
+            min-height: 100%;
+            padding: 24px 16px;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 50% 0%, #4a1f8f 0, var(--bg) 60%)
+        }
+
+        .wl * {
+            box-sizing: border-box
+        }
+
+        .wl .box {
+            width: min(480px, 100%);
+            background: var(--card);
+            border: 2px solid #5a35a8;
+            border-radius: 18px;
+            padding: 22px 20px 24px;
+            text-align: center;
+            box-shadow: 0 20px 60px #0008
+        }
+
+        .wl h1 {
+            margin: 0;
+            font-size: 26px;
+            line-height: 1.15;
+            color: var(--gold);
+            text-shadow: 0 2px 0 #7a4b00
+        }
+
+        .wl .sub {
+            margin: 6px 0 14px;
+            color: var(--mute);
+            font-size: 14px
+        }
+
+        .wl .stage {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto
+        }
+
+        .wl canvas {
+            display: block;
+            width: 100%;
+            height: auto
+        }
+
+        .wl .fx {
+            position: absolute;
+            inset: 0;
+            pointer-events: none
+        }
+
+        .wl .pips {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 14px 0 4px
+        }
+
+        .wl .pip {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            border: 2px solid var(--gold);
+            color: #3a2300;
+            background: var(--gold);
+            transition: .3s
+        }
+
+        .wl .pip.used {
+            background: transparent;
+            color: var(--mute);
+            border-color: #5a35a8;
+            transform: scale(.85)
+        }
+
+        .wl .left {
+            font-size: 13px;
+            color: var(--mute)
+        }
+
+        .wl button {
+            font: inherit;
+            cursor: pointer;
+            border: 0;
+            border-radius: 999px
+        }
+
+        .wl .go {
+            margin-top: 12px;
+            padding: 14px 44px;
+            font-size: 19px;
+            font-weight: 800;
+            color: #2c0a1a;
+            background: linear-gradient(#ffe27a, #ffb300);
+            box-shadow: 0 5px 0 #a86a00, 0 10px 24px #ff2e8855
+        }
+
+        .wl .go:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #a86a00
+        }
+
+        .wl .go:disabled {
+            filter: grayscale(.8);
+            opacity: .6;
+            cursor: not-allowed
+        }
+
+        .wl .go:focus-visible,
+        .wl .claim:focus-visible {
+            outline: 3px solid var(--teal);
+            outline-offset: 3px
+        }
+
+        .wl .toast {
+            min-height: 58px;
+            margin-top: 14px;
+            font-size: 15px;
+            color: var(--mute)
+        }
+
+        .wl .toast b {
+            display: block;
+            font-size: 22px;
+            color: var(--teal)
+        }
+
+        .wl .toast.pop b {
+            animation: wlpop .45s cubic-bezier(.2, 1.6, .4, 1)
+        }
+
+        @keyframes wlpop {
+            from {
+                transform: scale(.4);
+                opacity: 0
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .wl ul {
+            list-style: none;
+            margin: 10px 0 0;
+            padding: 0;
+            display: grid;
+            gap: 6px;
+            text-align: left
+        }
+
+        .wl li {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #1a0b2e;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 14px
+        }
+
+        .wl li i {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex: none
+        }
+
+        .wl li span {
+            color: var(--mute);
+            margin-left: auto;
+            font-size: 12px
+        }
+
+        .wl .claim {
+            margin-top: 14px;
+            padding: 13px 34px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #06241d;
+            background: var(--teal);
+            box-shadow: 0 5px 0 #0b8a74
+        }
+
+        .wl [hidden] {
+            display: none
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            .wl .toast.pop b {
+                animation: none
+            }
+
+            .wl .pip {
+                transition: none
+            }
+        }
+        
+    </style>
+</head>
+
+<body style="margin:0;background:#1a0b2e">
+    <!-- Botón flotante para volver al Lobby desde la Ruleta -->
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 9999;">
+        <a href="../lobby-jugador.html"
+            style="background: #a56023; color: rgb(0, 0, 0); padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+            <i class="fa-solid fa-arrow-left"></i> Volver al Lobby
+        </a>
+    </div>
+
+    <!-- ====== Bloque a pegar en tu plataforma ====== -->
+    <section class="wl" id="welcome-wheel" aria-label="Ruleta de bienvenida">
+        <div class="box">
+            <h1>¡Bienvenido! Tienes 5 giros gratis</h1>
+            <p class="sub">Cada giro es un premio. Úsalos todos y reclama tu botín.</p>
+            <div class="stage">
+                <canvas id="wl-wheel" width="440" height="440" aria-label="Ruleta de premios"></canvas>
+                <canvas class="fx" id="wl-fx" width="440" height="440" aria-hidden="true"></canvas>
+            </div>
+            <div class="pips" id="wl-pips" aria-hidden="true"></div>
+            <div class="left" id="wl-left" role="status"></div>
+            <button class="go" id="wl-go">¡GIRAR!</button>
+            <div class="toast" id="wl-toast" role="status" aria-live="polite">Pulsa «Girar» para empezar.</div>
+            <ul id="wl-list" aria-label="Premios ganados"></ul>
+            <button class="claim" id="wl-claim" hidden>Reclamar mis premios</button>
+        </div>
+    </section>
+
+    <script>
+        (() => {
+            const $ = id => document.getElementById(id);
+            const TAU = Math.PI * 2, FREE_SPINS = 5;
+
+            // ====== CONFIGURACIÓN DE PREMIOS (w = peso de probabilidad; big = lanza confeti grande) ======
+            const PRIZES = [
+                { t: 'S/ 10', d: 'S/ 10 de saldo gratis', c: '#ff2e88', w: 22 },
+                { t: '10 GIROS', d: '10 giros extra en tragamonedas', c: '#19b8e3', w: 14 },
+                { t: 'CASHBACK 5%', d: '1% de cashback durante 7 días', c: '#8d2fe0', w: 16 },
+                { t: 'S/ 50', d: 'S/ 50 de saldo gratis', c: '#ff7a1a', w: 6, big: true },
+                { t: 'BONO 100%', d: 'Bono del 100% en tu primer depósito', c: '#e0245e', w: 4, big: true },
+                { t: 'S/ 20', d: 'S/ 20 de saldo gratis', c: '#19c28a', w: 10 },
+                { t: 'VIP 1 DÍAS', d: 'Acceso VIP durante 1 días', c: '#4a56e8', w: 3, big: true },
+                { t: 'S/ 10', d: 'S/ 10 de saldo gratis', c: '#ff2e88', w: 22 },
+                { t: 'BONO 25%', d: 'Bono del 25% en tu primer depósito', c: '#d13fd1', w: 5 },
+                { t: 'JACKPOT', d: '¡JACKPOT! S/ 200 de saldo', c: '#ffc93c', w: 2, big: true, dark: true }
+            ];
+            const N = PRIZES.length, step = TAU / N, TOTAL_W = PRIZES.reduce((a, p) => a + p.w, 0);
+            const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const st = { left: FREE_SPINS, spinning: false, angle: 0, won: [], t: 0 };
+
+            // Sorteo ponderado con RNG criptográfico
+            function pick() {
+                const a = new Uint32Array(1); crypto.getRandomValues(a);
+                let r = a[0] / 2 ** 32 * TOTAL_W;
+                for (let i = 0; i < N; i++) { r -= PRIZES[i].w; if (r < 0) return i; }
+                return N - 1;
+            }
+
+            // ---- Dibujo ----
+            const cv = $('wl-wheel'), ctx = cv.getContext('2d'), fx = $('wl-fx'), fctx = fx.getContext('2d');
+            const C = 220, R = 210, BULBS = 24;
+            function draw(now) {
+                ctx.clearRect(0, 0, 440, 440);
+                const g = ctx.createLinearGradient(0, 0, 440, 440); g.addColorStop(0, '#ffe27a'); g.addColorStop(.5, '#ff9f1a'); g.addColorStop(1, '#ffd54a');
+                ctx.beginPath(); ctx.arc(C, C, R, 0, TAU); ctx.fillStyle = g; ctx.fill();
+                // bombillas: parpadean más rápido durante el giro
+                const phase = reduce ? 0 : Math.floor(now / (st.spinning ? 90 : 450));
+                for (let i = 0; i < BULBS; i++) {
+                    const a = i / BULBS * TAU, on = (i + phase) % 2 === 0;
+                    ctx.beginPath(); ctx.arc(C + Math.cos(a) * (R - 11), C + Math.sin(a) * (R - 11), 5.5, 0, TAU);
+                    ctx.fillStyle = on ? '#fffbe0' : '#a35a00'; ctx.shadowColor = on ? '#fff3a0' : 'transparent'; ctx.shadowBlur = on ? 10 : 0; ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+                ctx.save(); ctx.translate(C, C); ctx.rotate(st.angle);
+                PRIZES.forEach((p, i) => {
+                    const a0 = i * step - step / 2 - Math.PI / 2;
+                    ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, R - 26, a0, a0 + step); ctx.closePath();
+                    ctx.fillStyle = p.c; ctx.fill(); ctx.strokeStyle = '#fff8'; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.save(); ctx.rotate(i * step - Math.PI / 2); ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+                    ctx.fillStyle = p.dark ? '#3a1d00' : '#fff'; ctx.font = '800 17px Bahnschrift,Trebuchet MS,sans-serif';
+                    ctx.fillText(p.t, R - 44, 0); ctx.restore();
+                });
+                ctx.beginPath(); ctx.arc(0, 0, 36, 0, TAU); ctx.fillStyle = '#26124a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffc93c'; ctx.stroke();
+                ctx.restore();
+                ctx.fillStyle = '#ffc93c'; ctx.font = '800 22px Bahnschrift,Trebuchet MS,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(st.left, C, C + 1);
+                // puntero
+                ctx.beginPath(); ctx.moveTo(C - 15, 4); ctx.lineTo(C + 15, 4); ctx.lineTo(C, 42); ctx.closePath();
+                ctx.fillStyle = '#ff2e88'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke();
+                drawConfetti();
+            }
+
+            // ---- Confeti ----
+            let parts = [];
+            function burst(n) {
+                if (reduce) return;
+                const cols = ['#ffc93c', '#ff2e88', '#19e3c1', '#ffffff', '#6c3df5'];
+                for (let i = 0; i < n; i++) parts.push({ x: C, y: C, vx: (Math.random() - .5) * 14, vy: -Math.random() * 13 - 3, s: 4 + Math.random() * 5, r: Math.random() * TAU, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], life: 1 });
+            }
+            function drawConfetti() {
+                fctx.clearRect(0, 0, 440, 440);
+                parts = parts.filter(p => p.life > 0 && p.y < 460);
+                parts.forEach(p => {
+                    p.x += p.vx; p.y += p.vy; p.vy += .35; p.vx *= .99; p.r += p.vr; p.life -= .006;
+                    fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.r); fctx.globalAlpha = Math.max(p.life, 0);
+                    fctx.fillStyle = p.c; fctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); fctx.restore();
+                });
+            }
+            (function loop(now) { st.t = now; draw(now); requestAnimationFrame(loop); })(0);
+
+            // ---- Interfaz ----
+            function renderPips() {
+                $('wl-pips').innerHTML = Array.from({ length: FREE_SPINS }, (_, i) => `<div class="pip ${i >= st.left ? 'used' : ''}">${i + 1}</div>`).join('');
+                $('wl-left').textContent = st.left ? `Giros restantes: ${st.left}` : 'Sin giros restantes';
+            }
+            function renderList() {
+                $('wl-list').innerHTML = st.won.map((p, i) => `<li><i style="background:${p.c}"></i>${p.d}<span>Giro ${i + 1}</span></li>`).join('');
+            }
+
+            const ease = t => 1 - Math.pow(1 - t, 4);
+            function spin() {
+                if (st.spinning || st.left <= 0) return;
+                st.spinning = true; $('wl-go').disabled = true;
+                $('wl-toast').className = 'toast'; $('wl-toast').textContent = 'Girando…';
+                const idx = pick(), off = (Math.random() - .5) * step * .7;
+                const a0 = st.angle, target = -(idx * step + off);
+                const delta = (((target - a0) % TAU) + TAU) % TAU + TAU * 6;
+                const dur = reduce ? 700 : 5200, t0 = performance.now();
+                (function frame(now) {
+                    const t = Math.min((now - t0) / dur, 1);
+                    st.angle = a0 + delta * ease(t);
+                    if (t < 1) requestAnimationFrame(frame); else done(idx);
+                })(t0);
+            }
+
+            function done(idx) {
+                const p = PRIZES[idx];
+                st.won.push(p); st.left--; st.spinning = false;
+                renderPips(); renderList(); burst(p.big ? 160 : 50);
+                const toast = $('wl-toast'); toast.className = 'toast pop';
+                toast.innerHTML = `<b>¡${p.t}!</b>${p.d}`;
+                const root = $('welcome-wheel');
+                // Evento por cada premio (para guardarlo en tu backend)
+                root.dispatchEvent(new CustomEvent('welcome:prize', { bubbles: true, detail: { spin: FREE_SPINS - st.left, prize: p.t, description: p.d } }));
+                if (st.left > 0) { $('wl-go').disabled = false; return; }
+                $('wl-go').hidden = true; $('wl-claim').hidden = false;
+                toast.innerHTML = `<b>¡Terminaste tus ${FREE_SPINS} giros!</b>Estos son tus premios de bienvenida.`;
+                root.dispatchEvent(new CustomEvent('welcome:finished', { bubbles: true, detail: { prizes: st.won.map(x => x.t) } }));
+            }
+
+            $('wl-go').addEventListener('click', spin);
+            $('wl-claim').addEventListener('click', () => {
+                $('wl-claim').disabled = true; $('wl-claim').textContent = 'Premios reclamados ✓';
+                $('welcome-wheel').dispatchEvent(new CustomEvent('welcome:claim', { bubbles: true, detail: { prizes: st.won.map(x => x.t) } }));
+            });
+            renderPips();
+        })();
+    </script>
+</body>
+
+</html>
